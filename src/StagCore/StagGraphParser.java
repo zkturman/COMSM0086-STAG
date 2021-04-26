@@ -5,7 +5,6 @@ import StagExceptions.StagConfigReadException;
 import StagExceptions.StagException;
 import com.alexmerz.graphviz.*;
 import com.alexmerz.graphviz.objects.*;
-
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -16,9 +15,10 @@ public class StagGraphParser  {
     private Parser locationParser;
     ArrayList<Graph> locationGraphs;
 
-    public StagGraphParser(String filename){
+    public StagGraphParser(String filename) throws StagException {
         entitiesFile = filename;
         locationParser = new Parser();
+        generateGraphs();
     }
 
     private void generateGraphs() throws StagException {
@@ -32,7 +32,8 @@ public class StagGraphParser  {
         locationGraphs = locationParser.getGraphs();
     }
 
-    public static StagLocation generateLocations(){
+    public StagLocation generateLocations(){
         return null;
     }
+    public StagLocation generateUnplaced() { return null; }
 }

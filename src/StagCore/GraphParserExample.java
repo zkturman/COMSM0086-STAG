@@ -2,6 +2,8 @@ package StagCore;
 
 import com.alexmerz.graphviz.*;
 import com.alexmerz.graphviz.objects.*;
+
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -11,7 +13,8 @@ public class GraphParserExample {
     public static void main(String[] args) {
         try {
             Parser parser = new Parser();
-            FileReader reader = new FileReader(args[0]);
+            File f = new File(args[0]);
+            FileReader reader = new FileReader(f);
             parser.parse(reader);
             ArrayList<Graph> graphs = parser.getGraphs();
             ArrayList<Graph> subGraphs = graphs.get(0).getSubgraphs();
