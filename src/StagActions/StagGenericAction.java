@@ -8,4 +8,5 @@ public class StagGenericAction implements StagAction {
     private StagEntity[] requiredObjects;
     private StagEntity[] consumedObjects;
     private StagEntity[] producedObjects;
+    private String narration
 }
