@@ -1,6 +1,6 @@
 package StagCore;
 
-import StagActions.StagAction;
+import StagActions.*;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -8,8 +8,12 @@ import java.util.ArrayList;
 import StagActions.StagGenericAction;
 import StagExceptions.StagConfigReadException;
 import StagExceptions.StagException;
+import StagExceptions.StagMalformedActionError;
 import org.json.simple.*;
 
+/**
+ * StagJSONParser's only job is to turn a json file into an ArrayList of StagActions.
+ */
 public class StagJSONParser {
 
     private String actionsFile;
@@ -39,27 +43,58 @@ public class StagJSONParser {
         return jsonString.toString();
     }
 
-    public ArrayList<StagAction> generateActions(){
+    public ArrayList<StagAction> generateActions() throws StagException {
+        ArrayList<StagAction> actionList = new ArrayList<>();
+        checkExpectedType(JSONArray.class, actionObject.get("actions"));
         JSONArray actionArray = (JSONArray) actionObject.get("actions");
         for(Object obj : actionArray){
-            StagAction newAction = new StagGenericAction();
-            Object consumed = ((JSONObject) obj).get("consumed");
-            System.out.println(consumed.toString());
-            Object consumedObj = ((JSONArray) consumed).get(0);
-            System.out.println(consumedObj.toString());
-            Object subjects = ((JSONObject) obj).get("subjects");
-            System.out.println(subjects.toString());
-            Object subjectsObj = ((JSONArray) subjects).get(0);
-            System.out.println(subjectsObj.toString());
+            checkNull(obj);
+            checkExpectedType(JSONObject.class, obj);
+            StagGenericAction newAction = new StagGenericAction();
+            newAction.setConsumedObjects(createArrayFromJSON(obj, "consumed"));
+            newAction.setSubjectObjects(createArrayFromJSON(obj, "subjects"));
+            newAction.setTriggerWords(createArrayFromJSON(obj, "triggers"));
+            newAction.setProducedObjects(createArrayFromJSON(obj, "produced"));
             //narration is always a single string
-            Object narration = ((JSONObject) obj).get("narration");
-            System.out.println(narration.toString());
-//            Object narrationObj = ((JSONArray) narration).get(0);
-//            System.out.println(narrationObj.toString());
-            Object triggers = ((JSONObject) obj).get("triggers");
-            Object produced = ((JSONObject) obj).get("produced");
-
+            newAction.setNarration(returnStringFromKey(obj, "narration"));
         }
         return null;
     }
+
+    private String returnStringFromKey(Object obj,String keyName) throws StagException{
+        Object jsonString = ((JSONObject) obj).get(keyName);
+        checkExpectedType(String.class, jsonString);
+        return (String) jsonString;
+    }
+
+    private JSONArray returnArrayFromKey(Object obj, String keyName) throws StagException {
+        Object jsonArray = ((JSONObject) obj).get(keyName);
+        checkExpectedType(JSONArray.class, jsonArray);
+        return (JSONArray) jsonArray;
+    }
+
+    private ArrayList<String> createArrayFromJSON(Object obj, String keyName) throws StagException{
+        ArrayList<String> arrayToBuild = new ArrayList<>();
+        JSONArray jsonArray = returnArrayFromKey(obj, keyName);
+        //should be an array of strings
+        for(Object jsonString: jsonArray){
+            checkExpectedType(String.class, obj);
+            arrayToBuild.add((String) obj);
+        }
+        return arrayToBuild;
+    }
+
+    private void checkExpectedType (Class<?> cl, Object obj) throws StagException{
+        checkNull(obj);
+        if (!cl.isInstance(obj)){
+            throw new StagMalformedActionError();
+        }
+    }
+
+    private void checkNull(Object valueToCheck) throws StagException {
+        if (valueToCheck == null){
+            throw new StagMalformedActionError();
+        }
+    }
+
 }

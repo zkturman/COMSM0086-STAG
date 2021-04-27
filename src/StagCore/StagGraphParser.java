@@ -35,5 +35,6 @@ public class StagGraphParser  {
     public StagLocation generateLocations(){
         return null;
     }
+    public StagLocation getFirstLocation() {return null; }
     public StagLocation generateUnplaced() { return null; }
 }
