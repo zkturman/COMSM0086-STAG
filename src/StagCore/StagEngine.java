@@ -23,8 +23,8 @@ public class StagEngine {
         currentGame = new StagGame();
         entityBuilder = new StagGraphParser(entityFile);
         actionBuilder = new StagJSONParser(actionFile);
-        currentGame.setCustomActions(actionBuilder.generateActions());
-        currentGame.setStartLocation(entityBuilder.generateLocations());
-        currentGame.setUnplaced(entityBuilder.generateUnplaced());
+//        currentGame.setCustomActions(actionBuilder.generateActions());
+//        currentGame.setStartLocation(entityBuilder.generateLocations());
+//        currentGame.setUnplaced(entityBuilder.generateUnplaced());
     }
 }

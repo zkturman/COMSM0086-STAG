@@ -7,6 +7,7 @@ public class StagTest {
     public static void main(String[] args) {
         try {
             StagGenericAction.test();
+            StagGraphParser.test();
         }
         catch (StagException se){
             System.out.println("An exception was thrown during testing");

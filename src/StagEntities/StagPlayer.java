@@ -2,6 +2,6 @@ package StagEntities;
 
 public class StagPlayer implements StagEntity, StagCharacter{
 
-    private StagItem[] inventory;
+    private StagArtefact[] inventory;
     private int health;
 }

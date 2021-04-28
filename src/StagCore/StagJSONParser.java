@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import StagActions.StagGenericAction;
 import StagExceptions.StagConfigReadException;
 import StagExceptions.StagException;
-import StagExceptions.StagMalformedActionError;
+import StagExceptions.StagMalformedActionException;
 import org.json.simple.*;
 
 /**
@@ -87,13 +87,13 @@ public class StagJSONParser {
     private void checkExpectedType (Class<?> cl, Object obj) throws StagException{
         checkNull(obj);
         if (!cl.isInstance(obj)){
-            throw new StagMalformedActionError();
+            throw new StagMalformedActionException();
         }
     }
 
     private void checkNull(Object valueToCheck) throws StagException {
         if (valueToCheck == null){
-            throw new StagMalformedActionError();
+            throw new StagMalformedActionException();
         }
     }
 
