@@ -1,23 +1,22 @@
 package StagCore;
 
-import StagEntities.StagLocation;
-import StagExceptions.StagConfigReadException;
-import StagExceptions.StagException;
-import StagExceptions.StagMalformedLocationException;
+import StagExceptions.*;
 import com.alexmerz.graphviz.*;
 import com.alexmerz.graphviz.objects.*;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * The sole purpose of this class is to separate the locations and paths from a given DOT file
+ */
 public class StagGraphParser  {
 
-    private String entitiesFile;
-    private Parser locationParser;
-    ArrayList<Graph> locationConfig;
-    ArrayList<Graph> locationSettings;
-    ArrayList<Edge> pathSettings;
+    private final String entitiesFile;
+    private final Parser locationParser;
+    private ArrayList<Graph> locationConfig;
+    private ArrayList<Graph> locationSettings;
+    private ArrayList<Edge> pathSettings;
 
     public StagGraphParser(String filename) throws StagException {
         entitiesFile = filename;
@@ -58,6 +57,7 @@ public class StagGraphParser  {
 
     private void separateConfig() throws StagException {
         //one index has to be locations, and only one will return subgraphs
+        //TODO do we need to check the id is location and path
         locationSettings = locationConfig.get(0).getSubgraphs();
         pathSettings = locationConfig.get(1).getEdges();
 
@@ -84,7 +84,8 @@ public class StagGraphParser  {
 
     public static void test() throws StagException {
         StagGraphParser testParser = new StagGraphParser("src/basic-entities.dot");
-
+        assert testParser.getLocationSettings().size() == 4;
+        assert testParser.getPathSettings().size() == 3;
     }
 
 }

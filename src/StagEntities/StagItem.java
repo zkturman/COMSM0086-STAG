@@ -1,4 +1,5 @@
 package StagEntities;
 
-public class StagItem implements StagEntity {
+public enum StagItem {
+    ARTEFACT, FURNITURE, CHARACTER, PLAYER;
 }

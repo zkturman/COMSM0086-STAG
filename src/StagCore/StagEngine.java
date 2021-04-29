@@ -1,13 +1,12 @@
 package StagCore;
 
-import StagEntities.StagPlayer;
 import StagExceptions.StagException;
 
 public class StagEngine {
 
     private StagGame currentGame;
     private String incomingCommand;
-    private StagPlayer commandPlayer;
+//    private StagPlayer commandPlayer;
 //    private String entityFile;
 //    private String actionFile;
     private StagGraphParser entityBuilder;

@@ -1,13 +1,12 @@
 package StagActions;
 
-import StagEntities.StagEntity;
 
 public class StagBasicAction implements StagAction {
 
     private String[] triggers;
-    private StagEntity[] requiredObjects;
-    private StagEntity[] consumedObjects;
-    private StagEntity[] producedObjects;
+//    private StagEntity[] requiredObjects;
+//    private StagEntity[] consumedObjects;
+//    private StagEntity[] producedObjects;
 
     public void stagLook(){}
 
