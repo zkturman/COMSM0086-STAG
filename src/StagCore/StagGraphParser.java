@@ -84,6 +84,7 @@ public class StagGraphParser  {
 
     public static void test() throws StagException {
         StagGraphParser testParser = new StagGraphParser("src/basic-entities.dot");
+        testParser.generateGraphs();
         assert testParser.getLocationSettings().size() == 4;
         assert testParser.getPathSettings().size() == 3;
     }

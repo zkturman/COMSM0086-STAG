@@ -1,5 +1,5 @@
 package StagEntities;
 
 public enum StagItem {
-    ARTEFACT, FURNITURE, CHARACTER, PLAYER;
+    ARTEFACTS, FURNITURE, CHARACTERS, PLAYERS;
 }

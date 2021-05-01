@@ -20,13 +20,20 @@ public class StagItemLinker {
         this.itemMap = itemMap;
     }
 
-    public void updateLocationItems() throws StagException {
-        if (itemType.equals(StagItem.ARTEFACT)) location.setArtefacts(itemMap);
-        if (itemType.equals(StagItem.CHARACTER)) location.setCharacters(itemMap);
+    public void updateLocationItems(){
+        if (itemType.equals(StagItem.ARTEFACTS)) location.setArtefacts(itemMap);
+        if (itemType.equals(StagItem.CHARACTERS)) location.setCharacters(itemMap);
         if (itemType.equals(StagItem.FURNITURE)) location.setFurniture(itemMap);
     }
 
-    public static void test() {
-
+    public static void test() throws StagException {
+        StagLocation testLoc = new StagLocation("test");
+        StagItemLinker testLinker = new StagItemLinker(StagItem.ARTEFACTS, testLoc);
+        HashMap<String, String> testItemSet = new HashMap<>();
+        testItemSet.put("artefact",  "this is a description");
+        testLinker.setItemMap(testItemSet);
+        testLinker.updateLocationItems();
+        HashMap<String, String> testArtefacts = testLoc.getArtefacts();
+        assert testArtefacts.get("artefact").equals("this is a description");
     }
 }

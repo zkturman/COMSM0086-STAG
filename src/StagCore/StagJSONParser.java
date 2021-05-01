@@ -4,6 +4,7 @@ import StagActions.*;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import StagActions.StagGenericAction;
 import StagExceptions.StagConfigReadException;
@@ -16,13 +17,11 @@ import org.json.simple.*;
  */
 public class StagJSONParser {
 
-    private String actionsFile;
-    private JSONObject actionObject;
+    private final JSONObject actionObject;
 
     public StagJSONParser(String filename) throws StagException {
-        actionsFile = filename;
         try {
-            FileReader reader = new FileReader(actionsFile);
+            FileReader reader = new FileReader(filename);
             BufferedReader buffReader = new BufferedReader(reader);
             String jsonString = buildJSONString(buffReader);
             actionObject = (JSONObject) JSONValue.parse(jsonString);
@@ -51,14 +50,15 @@ public class StagJSONParser {
             checkNull(obj);
             checkExpectedType(JSONObject.class, obj);
             StagGenericAction newAction = new StagGenericAction();
-            newAction.setConsumedObjects(createArrayFromJSON(obj, "consumed"));
-            newAction.setSubjectObjects(createArrayFromJSON(obj, "subjects"));
-            newAction.setTriggerWords(createArrayFromJSON(obj, "triggers"));
-            newAction.setProducedObjects(createArrayFromJSON(obj, "produced"));
+            newAction.setConsumedObjects(createSetFromJSON(obj, "consumed"));
+            newAction.setSubjectObjects(createSetFromJSON(obj, "subjects"));
+            newAction.setTriggerWords(createSetFromJSON(obj, "triggers"));
+            newAction.setProducedObjects(createSetFromJSON(obj, "produced"));
             //narration is always a single string
             newAction.setNarration(returnStringFromKey(obj, "narration"));
+            actionList.add(newAction);
         }
-        return null;
+        return actionList;
     }
 
     private String returnStringFromKey(Object obj,String keyName) throws StagException{
@@ -73,15 +73,15 @@ public class StagJSONParser {
         return (JSONArray) jsonArray;
     }
 
-    private ArrayList<String> createArrayFromJSON(Object obj, String keyName) throws StagException{
-        ArrayList<String> arrayToBuild = new ArrayList<>();
+    private HashSet<String> createSetFromJSON(Object obj, String keyName) throws StagException{
+        HashSet<String> setToBuild = new HashSet<>();
         JSONArray jsonArray = returnArrayFromKey(obj, keyName);
         //should be an array of strings
         for(Object jsonString: jsonArray){
-            checkExpectedType(String.class, obj);
-            arrayToBuild.add((String) obj);
+            checkExpectedType(String.class, jsonString);
+            setToBuild.add((String) jsonString);
         }
-        return arrayToBuild;
+        return setToBuild;
     }
 
     private void checkExpectedType (Class<?> cl, Object obj) throws StagException{
@@ -97,7 +97,11 @@ public class StagJSONParser {
         }
     }
 
-    public static void test() {
-
+    public static void test() throws StagException {
+        StagJSONParser testParser = new StagJSONParser("src/basic-actions.json");
+        ArrayList<StagAction> testArray = testParser.generateActions();
+        assert testArray.size() == 4;
+        StagGenericAction test1 = (StagGenericAction) testArray.get(0);
+        assert test1.isTriggerWord("open");
     }
 }

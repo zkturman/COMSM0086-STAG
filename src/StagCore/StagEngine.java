@@ -1,29 +1,25 @@
 package StagCore;
 
+import StagActions.StagActionHandler;
 import StagExceptions.StagException;
 
+/**
+ * The sole purpose of this class is to maintain game state
+ */
 public class StagEngine {
 
     private StagGame currentGame;
     private String incomingCommand;
-//    private StagPlayer commandPlayer;
-//    private String entityFile;
-//    private String actionFile;
-    private StagGraphParser entityBuilder;
-    private StagJSONParser actionBuilder;
 
+    public StagEngine() {}
 
-
-    public void processMessage(String message){}
-
-    public void buildGame(String entityFile, String actionFile) throws StagException {
-//        this.entityFile = entityFile;
-//        this.actionFile = actionFile;
-        currentGame = new StagGame();
-        entityBuilder = new StagGraphParser(entityFile);
-        actionBuilder = new StagJSONParser(actionFile);
-//        currentGame.setCustomActions(actionBuilder.generateActions());
-//        currentGame.setStartLocation(entityBuilder.generateLocations());
-//        currentGame.setUnplaced(entityBuilder.generateUnplaced());
+    public void processMessage(String message){
+        StagActionHandler actionInterpreter = new StagActionHandler();
     }
+
+    public void setCurrentGame(StagGame currentGame) {
+        this.currentGame = currentGame;
+    }
+
+    public void addPlayer() { };
 }

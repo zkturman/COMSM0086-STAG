@@ -1,6 +1,6 @@
-package StagCore;
+package StagEntities;
 
-import StagEntities.StagLocation;
+import StagExceptions.StagException;
 import com.alexmerz.graphviz.objects.Edge;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,6 +24,16 @@ public class StagLocationConnector {
     }
 
     public void generateConnections(){
+        for (Edge path : locationPaths){
+            String fromLocKey = path.getSource().getNode().getId().getId();
+            StagLocation fromLocation = gameLocations.get(fromLocKey);
+            String toLocKey = path.getTarget().getNode().getId().getId();
+            StagLocation toLocation = gameLocations.get(toLocKey);
+            fromLocation.addNeighbor(toLocation);
+        }
+    }
+
+    public static void test() throws StagException{
 
     }
 }

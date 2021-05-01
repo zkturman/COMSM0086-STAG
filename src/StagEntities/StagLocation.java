@@ -8,33 +8,65 @@ import java.util.HashMap;
 public class StagLocation{
 
     private String locationName;
+    private String description;
     private HashMap<String, String> characters;
     private HashMap<String, String> artefacts;
     private HashMap<String, String> furniture;
-    private HashMap<String, String> players;
-    private HashMap<String, String> neighborLocations;
+    private HashMap<String, StagPlayer> players;
+    private HashMap<String, StagLocation> neighborLocations;
 
     public StagLocation(String name){
         locationName = name;
+        neighborLocations = new HashMap<>();
     }
+
+    public String getLocationName() {
+        return locationName;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public void setArtefacts(HashMap<String, String> artefacts) {
         this.artefacts = artefacts;
+    }
+
+    public HashMap<String, String> getArtefacts() {
+        return artefacts;
     }
 
     public void setCharacters(HashMap<String, String> characters) {
         this.characters = characters;
     }
 
+    public HashMap<String, String> getCharacters() {
+        return characters;
+    }
+
     public void setFurniture(HashMap<String, String> furniture) {
         this.furniture = furniture;
     }
 
-    public void setPlayers(HashMap<String, String> players) {
+    public HashMap<String, String> getFurniture() {
+        return furniture;
+    }
+
+    public void setPlayers(HashMap<String, StagPlayer> players) {
         this.players = players;
     }
 
-    public void setNeighborLocations(HashMap<String, String> neighborLocations) {
-        this.neighborLocations = neighborLocations;
+    public HashMap<String, StagPlayer> getPlayers() {
+        return players;
+    }
+
+    public HashMap<String, StagLocation> getNeighborLocations() {
+        return neighborLocations;
+    }
+
+    public void addNeighbor(StagLocation newNeighbor){
+        String neighborName = newNeighbor.getLocationName();
+        neighborLocations.put(neighborName, newNeighbor);
     }
 
     public static void test() {

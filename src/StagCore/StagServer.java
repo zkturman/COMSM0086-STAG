@@ -9,6 +9,7 @@ import java.util.*;
 public class StagServer {
 
     private StagEngine engine;
+    private StagGame game;
     public static void main(String[] args)
     {
         if(args.length != 2) System.out.println("Usage: java StagServer <entity-file> <action-file>");
@@ -18,8 +19,11 @@ public class StagServer {
     public StagServer(String entityFilename, String actionFilename, int portNumber)
     {
         try {
+            game = new StagGame();
+            game.generateLocations(entityFilename);
+            game.generateActions(actionFilename);
             engine = new StagEngine();
-            engine.buildGame(entityFilename, actionFilename);
+            engine.setCurrentGame(game);
             ServerSocket ss = new ServerSocket(portNumber);
             System.out.println("Server Listening");
             while(true) acceptNextConnection(ss);
@@ -47,7 +51,7 @@ public class StagServer {
     private void processNextCommand(BufferedReader in, BufferedWriter out) throws IOException
     {
         String line = in.readLine();
-            engine.processMessage(line);
+        engine.processMessage(line);
         out.write("You said... " + line + "\n");
     }
 }

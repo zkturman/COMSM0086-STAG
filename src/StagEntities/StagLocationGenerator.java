@@ -29,20 +29,21 @@ public class StagLocationGenerator {
             StagUtility.checkNull(locationNode);
 
             //location name in first node
-            String locationName = locationNode.get(0).getId().getId();
-
+            Node locationInfo = locationNode.get(0);
+            String locationName = locationInfo.getId().getId();
+            String locationDesc = locationInfo.getAttribute("description");
             ArrayList<Graph> locationItems = location.getSubgraphs();
-            StagLocation locToAdd = createLocation(locationName, locationItems);
 
             //add new location to hash map
+            StagLocation locToAdd = new StagLocation(locationName);
+            locToAdd.setDescription(locationDesc);
+            createLocation(locToAdd, locationItems);
             gameLocations.put(locationName, locToAdd);
         }
         return gameLocations;
     }
 
-    private StagLocation createLocation(String locationName, ArrayList<Graph> itemSettings) throws StagException {
-        StagLocation locationToCreate = new StagLocation(locationName);
-        //set name
+    private void createLocation(StagLocation locationToUpdate, ArrayList<Graph> itemSettings) throws StagException {
         for (Graph itemList : itemSettings) {
 
             //get item type from node id. capitilise to convert to enum
@@ -52,11 +53,10 @@ public class StagLocationGenerator {
             ArrayList<Node> typedItems = itemList.getNodes(false);
 
             //helper class to set items in location
-            StagItemLinker itemToAdd = new StagItemLinker(itemEnum, locationToCreate);
+            StagItemLinker itemToAdd = new StagItemLinker(itemEnum, locationToUpdate);
             itemToAdd.setItemMap(generateItems(typedItems));
             itemToAdd.updateLocationItems();
         }
-        return locationToCreate;
     }
 
     private HashMap<String, String> generateItems(ArrayList<Node> typedItems) throws StagException {
@@ -82,7 +82,24 @@ public class StagLocationGenerator {
         }
     }
 
-    public static void test(){
+    public String getFirstLocation(){
+        //get first location settings
+        Graph locationSettings = locationGraphs.get(0);
 
+        //get name from first node in settings
+        return locationSettings.getNodes(false).get(0).getId().getId();
+    }
+
+    public static void test() throws StagException {
+        StagGraphParser testGraph = new StagGraphParser("src/basic-entities.dot");
+        testGraph.generateGraphs();
+        StagLocationGenerator testGenerator = new StagLocationGenerator();
+        testGenerator.setLocationGraphs(testGraph.getLocationSettings());
+        HashMap<String, StagLocation> testLocations = testGenerator.generateLocations();
+        assert testLocations.size() == 4;
+        assert testLocations.get("zzzz") == null;
+        assert testLocations.get("start") != null;
+
+        //TODO test information in locations, as that is generated here
     }
 }
