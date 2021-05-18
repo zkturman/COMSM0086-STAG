@@ -22,8 +22,7 @@ public class StagServer {
             game = new StagGame();
             game.generateLocations(entityFilename);
             game.generateActions(actionFilename);
-            engine = new StagEngine();
-            engine.setCurrentGame(game);
+            engine = new StagEngine(game);
             ServerSocket ss = new ServerSocket(portNumber);
             System.out.println("Server Listening");
             while(true) acceptNextConnection(ss);
@@ -51,7 +50,12 @@ public class StagServer {
     private void processNextCommand(BufferedReader in, BufferedWriter out) throws IOException
     {
         String line = in.readLine();
-        engine.processMessage(line);
-        out.write("You said... " + line + "\n");
+        try {
+            engine.processMessage(line);
+            out.write("You said... " + line + "\n");
+        }
+        catch (StagException se){
+            System.out.println(se.getMessage());
+        }
     }
 }

@@ -1,5 +1,8 @@
 package StagCore;
 
+import StagActions.StagActionHandler;
+import StagActions.StagActionPerformer;
+import StagActions.StagBasicAction;
 import StagActions.StagGenericAction;
 import StagEntities.StagItemLinker;
 import StagEntities.StagLocation;
@@ -16,10 +19,13 @@ public class StagTest {
             StagLocationGenerator.test();
             StagGame.test();
             StagItemLinker.test();
+            StagBasicAction.test();
             //TODO the following tests
             StagLocation.test();
             StagUtility.test();
             StagLocationConnector.test();
+            StagActionHandler.test();
+            StagActionPerformer.test();
 
         }
         catch (StagException se){

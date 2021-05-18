@@ -101,5 +101,9 @@ public class StagLocationGenerator {
         assert testLocations.get("start") != null;
 
         //TODO test information in locations, as that is generated here
+        StagLocation testStart = testLocations.get("start");
+        assert testStart.getArtefacts().get("potion") != null;
+        assert testStart.getArtefacts().get("door") == null;
+        assert testStart.getFurniture().get("door") != null;
     }
 }

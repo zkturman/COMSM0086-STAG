@@ -1,6 +1,5 @@
 package StagCore;
 
-import StagActions.StagAction;
 import StagActions.StagGenericAction;
 import StagEntities.*;
 import StagExceptions.StagException;
@@ -15,8 +14,8 @@ public class StagGame {
     private HashMap<String, StagLocation> gameLocations;
     private StagLocation startLocation;
     private StagLocation unplacedLocation;
-    private HashMap<String, StagPlayer> players;
-    private ArrayList<StagAction> customActions;
+//    private HashMap<String, StagPlayer> players;
+    private ArrayList<StagGenericAction> customActions;
     private StagJSONParser actionGenerator;
     private StagGraphParser locationInfo;
 
@@ -46,7 +45,7 @@ public class StagGame {
         this.startLocation = gameLocations.get(locationGenerator.getFirstLocation());
     }
 
-    public ArrayList<StagAction> getCustomActions() {
+    public ArrayList<StagGenericAction> getCustomActions() {
         return customActions;
     }
 
@@ -67,11 +66,11 @@ public class StagGame {
 
         //test actions
         game.generateActions("src/basic-actions.json");
-        ArrayList<StagAction> customActions = game.getCustomActions();
+        ArrayList<StagGenericAction> customActions = game.getCustomActions();
         assert customActions.size() == 4;
         StagGenericAction testAction = (StagGenericAction) customActions.get(0);
-        assert testAction.isTriggerWord("open");
-        assert !testAction.isTriggerWord("zzzz");
+//        assert testAction.isTriggerWord("open");
+//        assert !testAction.isTriggerWord("zzzz");
 
         //test locations
         game.generateLocations("src/basic-entities.dot");

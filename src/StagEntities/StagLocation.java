@@ -18,6 +18,10 @@ public class StagLocation{
     public StagLocation(String name){
         locationName = name;
         neighborLocations = new HashMap<>();
+        characters = new HashMap<>();
+        artefacts = new HashMap<>();
+        furniture = new HashMap<>();
+        players = new HashMap<>();
     }
 
     public String getLocationName() {
@@ -26,6 +30,10 @@ public class StagLocation{
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public void setArtefacts(HashMap<String, String> artefacts) {
