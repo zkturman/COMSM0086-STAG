@@ -1,15 +1,17 @@
 package StagCore;
 
 import StagExceptions.StagException;
-
 import java.io.*;
 import java.net.*;
-import java.util.*;
 
+/**
+ * The sole purpose of this class is to pass commands from connected players to engine
+ * and send players the output message.
+ */
 public class StagServer {
 
     private StagEngine engine;
-    private StagGame game;
+
     public static void main(String[] args)
     {
         if(args.length != 2) System.out.println("Usage: java StagServer <entity-file> <action-file>");
@@ -19,7 +21,7 @@ public class StagServer {
     public StagServer(String entityFilename, String actionFilename, int portNumber)
     {
         try {
-            game = new StagGame();
+            StagGame game = new StagGame();
             game.generateLocations(entityFilename);
             game.generateActions(actionFilename);
             engine = new StagEngine(game);
@@ -27,7 +29,7 @@ public class StagServer {
             System.out.println("Server Listening");
             while(true) acceptNextConnection(ss);
         } catch(IOException | StagException ioe) {
-            System.err.println(ioe);
+            ioe.printStackTrace();
         }
     }
 
@@ -43,7 +45,7 @@ public class StagServer {
             in.close();
             socket.close();
         } catch(IOException ioe) {
-            System.err.println(ioe);
+            ioe.printStackTrace();
         }
     }
 
@@ -52,9 +54,10 @@ public class StagServer {
         String line = in.readLine();
         try {
             engine.processMessage(line);
-            out.write("You said... " + line + "\n");
+            out.write(engine.getReturnMessage() +  "\n");
         }
         catch (StagException se){
+            out.write("ERROR: An error occurred. " + se.getErrorString());
             System.out.println(se.getMessage());
         }
     }

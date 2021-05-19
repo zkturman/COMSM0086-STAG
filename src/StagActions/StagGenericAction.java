@@ -20,7 +20,7 @@ public class StagGenericAction {
     public StagGenericAction(){
     }
 
-    public void setConsumedObjects(HashSet<String> consumedObjects) throws StagException {
+    public void setConsumedObjects(HashSet<String> consumedObjects){
         this.consumedObjects = consumedObjects;
     }
 
@@ -28,18 +28,23 @@ public class StagGenericAction {
         return this.consumedObjects;
     }
 
-    public void setSubjectObjects(HashSet<String> subjectObjects) throws StagException {
+    public void setSubjectObjects(HashSet<String> subjectObjects){
         this.subjectObjects = subjectObjects;
     }
 
     public HashSet<String> getSubjectObjects(){
         return this.subjectObjects;
     }
-    public void setTriggerWords(HashSet<String> triggerWords) throws StagException {
-        this.triggerWords = triggerWords;
+
+    public void setTriggerWords(HashSet<String> triggerWords){
+        this.triggerWords = new HashSet<>();
+        //put all triggers in lower case because commands converted to lower case
+        for(String trigger : triggerWords){
+            this.triggerWords.add(trigger.toLowerCase());
+        }
     }
 
-    public void setProducedObjects(HashSet<String> producedObjects) throws StagException {
+    public void setProducedObjects(HashSet<String> producedObjects){
         this.producedObjects = producedObjects;
     }
 
@@ -47,7 +52,7 @@ public class StagGenericAction {
         return producedObjects;
     }
 
-    public void setNarration(String narrationText) throws StagException {
+    public void setNarration(String narrationText){
         this.narration = narrationText;
     }
 
@@ -71,8 +76,7 @@ public class StagGenericAction {
     }
 
     private Pattern createPattern(String trigger){
-        Pattern pattern = Pattern.compile("(\\s+|^)" + trigger + "(\\s+|$)");
-        return pattern;
+        return Pattern.compile("(\\s+|^)" + trigger + "(\\s+|$)");
     }
 
     public static void test() throws StagException {
@@ -80,9 +84,6 @@ public class StagGenericAction {
         HashSet<String> triggers = new HashSet<>();
         triggers.add("test"); triggers.add("action");
         testAction.setTriggerWords(triggers);
-//        assert testAction.isTriggerWord("action");
-//        assert !testAction.isTriggerWord("acting");
-//        assert testAction.isTriggerWord("test");
         assert testAction.containsTrigger("this is a test", triggers);
         assert testAction.containsTrigger("test is a test", triggers);
         assert testAction.containsTrigger(" test is a test", triggers);

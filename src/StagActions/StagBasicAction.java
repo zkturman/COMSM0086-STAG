@@ -29,6 +29,8 @@ public class StagBasicAction {
         actionMapping.put("inventory", "stagInventory");
         actionMapping.put("get", "stagGet");
         actionMapping.put("drop", "stagDrop");
+        actionMapping.put("health", "stagHealth");
+        returnMessage = "";
     }
 
     public String getReturnMessage(){
@@ -43,6 +45,7 @@ public class StagBasicAction {
             actionMethod.invoke(this, player);
         }
         catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException exception){
+            exception.printStackTrace();
             throw new StagMalformedCommandException("An invalid basic command was attempted.");
         }
     }
@@ -53,7 +56,7 @@ public class StagBasicAction {
         //current location description
         returnString.append(playerLocation.getDescription());
 
-        returnString.append(" Here you see the following: \n");
+        returnString.append("\nHere you see the following: \n");
         //object descriptions
         entityBuilder(playerLocation.getFurniture(), returnString);
         entityBuilder(playerLocation.getCharacters(), returnString);
@@ -163,6 +166,10 @@ public class StagBasicAction {
         return foundArtefact;
     }
 
+    public void stagHealth(StagPlayer player){
+        returnMessage = "Current health: " + player.getHealth() + ".\n";
+    }
+
     //TODO you basically repeat this in generic action
     public boolean containsTrigger(String incomingMessage) {
         Set<String> triggerSet = actionMapping.keySet();
@@ -170,7 +177,7 @@ public class StagBasicAction {
         for(String trigger : triggerSet){
             Matcher matchTrigger = createPattern(trigger).matcher(incomingMessage);
             if (matchTrigger.find()) {
-                actionToBePerformed = incomingMessage.substring(matchTrigger.start(), matchTrigger.end());
+                actionToBePerformed = incomingMessage.substring(matchTrigger.start(), matchTrigger.end()).trim();
                 found = true;
                 incomingCommand = incomingMessage;
             }
@@ -197,7 +204,5 @@ public class StagBasicAction {
         assert testAction.containsTrigger("goto");
         assert testAction.containsTrigger("goto");
         assert testAction.containsTrigger("goto");
-
-
     }
 }

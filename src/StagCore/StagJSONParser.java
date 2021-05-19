@@ -101,7 +101,5 @@ public class StagJSONParser {
         StagJSONParser testParser = new StagJSONParser("src/basic-actions.json");
         ArrayList<StagGenericAction> testArray = testParser.generateActions();
         assert testArray.size() == 4;
-        StagGenericAction test1 = (StagGenericAction) testArray.get(0);
-//        assert test1.isTriggerWord("open");
     }
 }

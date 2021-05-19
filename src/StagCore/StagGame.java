@@ -16,18 +16,16 @@ public class StagGame {
     private StagLocation unplacedLocation;
 //    private HashMap<String, StagPlayer> players;
     private ArrayList<StagGenericAction> customActions;
-    private StagJSONParser actionGenerator;
-    private StagGraphParser locationInfo;
 
     public StagGame(){}
 
     public void generateActions(String filename) throws StagException {
-        actionGenerator = new StagJSONParser(filename);
+        StagJSONParser actionGenerator = new StagJSONParser(filename);
         this.customActions = actionGenerator.generateActions();
     }
 
     public void generateLocations(String filename) throws StagException {
-        locationInfo = new StagGraphParser(filename);
+        StagGraphParser locationInfo = new StagGraphParser(filename);
         locationInfo.generateGraphs();
 
         //build map of locations
@@ -68,9 +66,6 @@ public class StagGame {
         game.generateActions("src/basic-actions.json");
         ArrayList<StagGenericAction> customActions = game.getCustomActions();
         assert customActions.size() == 4;
-        StagGenericAction testAction = (StagGenericAction) customActions.get(0);
-//        assert testAction.isTriggerWord("open");
-//        assert !testAction.isTriggerWord("zzzz");
 
         //test locations
         game.generateLocations("src/basic-entities.dot");
@@ -84,8 +79,5 @@ public class StagGame {
         assert gameLocations.get("start") == startLocation;
         assert gameLocations.get("start") != unplaced;
         assert gameLocations.get("unplaced") == unplaced;
-
-        //test connections
-
     }
 }

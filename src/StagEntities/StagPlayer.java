@@ -22,13 +22,27 @@ public class StagPlayer {
 
     public void setCurrentLocation(StagLocation currentLocation) {
         this.currentLocation = currentLocation;
+        currentLocation.getPlayers().put(name, this);
     }
 
     public void addToInv(String key, String description){
-
+        inventory.put(key, description);
     }
 
-    public void reduceHealth() {}
-    private void killPlayer() {}
-    private void revivePlayer() {}
+    public void increaseHealth(){
+        health++;
+    }
+
+    public int reduceHealth() {
+        health--;
+        return health;
+    }
+
+    public int getHealth(){
+        return this.health;
+    }
+
+    public void revivePlayer() {
+        health = 3;
+    }
 }

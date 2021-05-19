@@ -3,7 +3,6 @@ package StagActions;
 import StagCore.StagGame;
 import StagEntities.*;
 import StagExceptions.StagException;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
@@ -43,7 +42,6 @@ public class StagActionHandler {
         //search for custom command triggers and subjects
         ArrayList<StagGenericAction> customActions = findPossibleActions(command);
         determineAction(customActions);
-//        StagUtility.checkNull(customActions);
 
         //execute custom command
         StagActionPerformer actionPerformer = new StagActionPerformer(actionToExecute);
@@ -52,6 +50,10 @@ public class StagActionHandler {
             actionPerformer.performAction();
             returnMessage = actionPerformer.getReturnMessage();
         }
+
+        //clear previous actions
+        actionToExecute = null;
+
         //custom return messages would overwrite built-in ones
         return returnMessage;
     }
@@ -144,11 +146,6 @@ public class StagActionHandler {
         assert testHandler.findSubject("start");
         assert testHandler.findSubject("potion");
         assert !testHandler.findSubject("key");
-
-        //test possible actions
-
-        //test canExecute
-
     }
 
 

@@ -19,19 +19,20 @@ public class StagActionPerformer {
     String returnMessage;
     ArrayList<HashMap<String, String>> objectsMap;
     HashMap<String, StagLocation> locations;
-    StagLocation unplaced;
-    ArrayList<HashMap<String, String>> unplacedObjectsMap;
     boolean newLocation;
     StagLocation currentLocation;
+    private StagPlayer player;
+    boolean playerDied;
+    private StagGame game;
 
     public StagActionPerformer(StagGenericAction actionToPerform){
         this.actionToPerform = actionToPerform;
     }
 
     public String getReturnMessage() {
-        if (returnMessage == null){
+        if (returnMessage.equals("")){
             //something went wrong, but we still need to tell players something
-            returnMessage = "An error occurred. This action cannot be performed.";
+            returnMessage = "An error occurred. The action wasn't performed.";
         }
         return returnMessage;
     }
@@ -43,17 +44,15 @@ public class StagActionPerformer {
     public void prepareAction(StagPlayer player, StagGame game) throws StagException {
         checkNull();
         //this is gross and I probably shouldn't do this
+        this.player = player;
+        this.game = game;
         objectsMap = new ArrayList<>();
         objectsMap.add(player.getInventory());
         objectsMap.add(player.getCurrentLocation().getArtefacts());
         objectsMap.add(player.getCurrentLocation().getFurniture());
         objectsMap.add(player.getCurrentLocation().getCharacters());
 
-        unplaced = game.getUnplacedLocation();
-        unplacedObjectsMap = new ArrayList<>();
-        unplacedObjectsMap.add(unplaced.getArtefacts());
-        unplacedObjectsMap.add(unplaced.getFurniture());
-        unplacedObjectsMap.add(unplaced.getCharacters());
+        locations = game.getGameLocations();
         newLocation = false;
 
         currentLocation = player.getCurrentLocation();
@@ -62,21 +61,34 @@ public class StagActionPerformer {
     public void performAction() throws StagException {
         removeConsumed();
         addProduced();
-        returnMessage = actionToPerform.getNarration();
+        StringBuilder returnString = new StringBuilder();
+        returnString.append(actionToPerform.getNarration());
+        if (playerDied){
+            returnString.append("\nYou died... back to the beginning for you.\n");
+            StagBasicAction lookInfo = new StagBasicAction();
+            lookInfo.stagLook(player);
+            returnString.append(lookInfo.getReturnMessage());
+        }
+        returnMessage = returnString.toString();
     }
 
     private void removeConsumed() throws StagException {
         checkNull();
+        boolean changed;
         HashSet<String> consumedObjects = actionToPerform.getConsumedObjects();
         //this by default ignores items not in the map, but need to add handling
         for (String key : consumedObjects){
-            checkAndRemove(key);
-        }
-    }
-
-    private void checkAndRemove(String key) throws StagException {
-        if (!removeGameObject(key) && !removeLocation(locations, key)){
-            throw new StagActionSetupException("Could not find objects to consume in action.");
+            if (removeLocation(locations, key)){
+                changed = true;
+            }
+            else if (key.equals("health")){
+                removeHealth();
+                changed = true;
+            }
+            else{
+                changed = removeGameObject(key);
+            }
+            checkRemoved(changed);
         }
     }
 
@@ -92,6 +104,26 @@ public class StagActionPerformer {
             removed = true;
         }
         return removed;
+    }
+
+    private void removeHealth(){
+        int currentHealth = player.reduceHealth();
+        if (currentHealth <= 0){
+            dumpPlayerInv();
+            player.setCurrentLocation(game.getStartLocation());
+            player.revivePlayer();
+            playerDied = true;
+        }
+    }
+
+    private void dumpPlayerInv(){
+        Set<String> inventory = player.getInventory().keySet();
+        for(String artefact : inventory){
+            //remove item from player inv and add to current location
+            String description = player.getInventory().get(artefact);
+            player.getCurrentLocation().getArtefacts().put(artefact, description);
+        }
+        player.getInventory().clear();
     }
 
     private boolean removeGameObject(String key){
@@ -112,54 +144,76 @@ public class StagActionPerformer {
         return false;
     }
 
+    private void checkRemoved(boolean updated) throws StagException {
+        if (!updated){
+            throw new StagActionSetupException("Could not find objects to consume in action.");
+        }
+    }
+
     private void addProduced() throws StagException {
         checkNull();
+        boolean changed;
         HashSet<String> producedObjects = actionToPerform.getProducedObjects();
-        //all things except locations should be in unplaced or a location
-        checkValidUnplaced(producedObjects);
         //remove objects from unplaced and add to current location
         for (String key : producedObjects) {
             if (locations.containsKey(key)) {
                 addNewLocation(locations.get(key));
-            } else {
-                updateItems(key);
+                changed = true;
             }
-        }
-    }
-
-    private void checkValidUnplaced(HashSet<String> producedObjects)throws StagException {
-        for (String key : producedObjects) {
-            if (!unplacedHasKey(key)) {
-                throw new StagActionSetupException("Game is missing produced location or produced objects in unplaced.");
+            else if (key.equals("health")){
+                increaseHealth();
+                changed = true;
             }
-        }
-    }
-
-    private boolean unplacedHasKey(String key){
-        //if in locations already set to true
-        boolean found = locations.containsKey(key);
-        newLocation = found;
-        for (HashMap<String, String> map : unplacedObjectsMap){
-            if (map.containsKey(key)){
-                found = true;
+            else {
+                changed = searchAndUpdate(key);
             }
+            checkUpdate(changed);
         }
-        return found;
     }
 
     private void addNewLocation(StagLocation locationToConnect){
         currentLocation.addNeighbor(locationToConnect);
     }
 
-    private void updateItems(String key){
-        if (unplaced.getArtefacts().containsKey(key)){
-            currentLocation.getArtefacts().put(key, unplaced.getArtefacts().remove(key));
+    private void increaseHealth(){
+        player.increaseHealth();
+    }
+
+    private boolean searchAndUpdate(String key){
+        //if in locations already set to true
+        boolean found = false;
+        Set<String> gameLocations = locations.keySet();
+        for (String locationName : gameLocations){
+            StagLocation location = locations.get(locationName);
+            if (checkForProduced(location, key)){
+                updateItems(location, key);
+                found = true;
+            }
         }
-        if (unplaced.getFurniture().containsKey(key)){
-            currentLocation.getFurniture().put(key, unplaced.getFurniture().remove(key));
+        return found;
+    }
+
+    private boolean checkForProduced(StagLocation location, String key){
+        return location.getArtefacts().containsKey(key)
+                || location.getFurniture().containsKey(key) || location.getCharacters().containsKey(key);
+    }
+
+    private void updateItems(StagLocation location, String key){
+        //this is okay because entities are unique
+        if (location.getArtefacts().containsKey(key)){
+            currentLocation.getArtefacts().put(key, location.getArtefacts().remove(key));
         }
-        if (unplaced.getCharacters().containsKey(key)) {
-            currentLocation.getCharacters().put(key, unplaced.getCharacters().remove(key));
+        if (location.getFurniture().containsKey(key)){
+            currentLocation.getFurniture().put(key, location.getFurniture().remove(key));
+        }
+        if (location.getCharacters().containsKey(key)) {
+            currentLocation.getCharacters().put(key, location.getCharacters().remove(key));
+        }
+    }
+
+    private void checkUpdate(boolean updated) throws StagActionSetupException {
+        if (!updated){
+            throw new StagActionSetupException(actionToPerform + " contained a produced item that doesn't exist in the game.");
         }
     }
 
@@ -168,9 +222,5 @@ public class StagActionPerformer {
         if (actionToPerform == null){
             throw new StagNullActionException(errorMessage);
         }
-    }
-
-    public static void test(){
-
     }
 }
