@@ -14,7 +14,6 @@ public class StagGame {
     private HashMap<String, StagLocation> gameLocations;
     private StagLocation startLocation;
     private StagLocation unplacedLocation;
-//    private HashMap<String, StagPlayer> players;
     private ArrayList<StagGenericAction> customActions;
 
     public StagGame(){}

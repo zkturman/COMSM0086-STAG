@@ -1,6 +1,7 @@
 package StagExceptions;
 
-import StagEntities.StagLocation;
-
 public class StagMalformedLocationException extends StagException {
+    public StagMalformedLocationException(String errorMessage){
+        super(errorMessage);
+    }
 }

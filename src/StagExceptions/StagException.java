@@ -3,11 +3,13 @@ package StagExceptions;
 public abstract class StagException extends Exception{
     protected String errorMessage;
 
-    public StagException(){};
+    public StagException(){}
 
-    public StagException(String errorMessage){};
+    public StagException(String errorMessage){
+        this.errorMessage = errorMessage;
+    }
 
-    public String getErrorString(){
+    public String getErrorMessage(){
         return this.errorMessage;
     }
 }

@@ -10,7 +10,7 @@ import java.net.*;
  */
 public class StagServer {
 
-    private StagEngine engine;
+    private StagEngine gameEngine;
 
     public static void main(String[] args)
     {
@@ -24,9 +24,10 @@ public class StagServer {
             StagGame game = new StagGame();
             game.generateLocations(entityFilename);
             game.generateActions(actionFilename);
-            engine = new StagEngine(game);
+            gameEngine = new StagEngine(game);
             ServerSocket ss = new ServerSocket(portNumber);
             System.out.println("Server Listening");
+            //noinspection InfiniteLoopStatement
             while(true) acceptNextConnection(ss);
         } catch(IOException | StagException ioe) {
             ioe.printStackTrace();
@@ -53,12 +54,12 @@ public class StagServer {
     {
         String line = in.readLine();
         try {
-            engine.processMessage(line);
-            out.write(engine.getReturnMessage() +  "\n");
+            gameEngine.processMessage(line);
+            out.write(gameEngine.getReturnMessage() + "\n");
         }
         catch (StagException se){
-            out.write("ERROR: An error occurred. " + se.getErrorString());
-            System.out.println(se.getMessage());
+            out.write("ERROR: An error occurred. " + se.getErrorMessage());
+            se.printStackTrace();
         }
     }
 }

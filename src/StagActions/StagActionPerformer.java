@@ -6,11 +6,11 @@ import StagEntities.StagPlayer;
 import StagExceptions.StagException;
 import StagExceptions.StagActionSetupException;
 import StagExceptions.StagNullActionException;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+
 /**
  * Performs a custom action
  */

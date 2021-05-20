@@ -1,11 +1,8 @@
 package StagCore;
 
-import StagActions.*;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
-
 import StagActions.StagGenericAction;
 import StagExceptions.StagConfigReadException;
 import StagExceptions.StagException;
@@ -28,7 +25,7 @@ public class StagJSONParser {
             buffReader.close();
         }
         catch(IOException exception){
-            throw new StagConfigReadException();
+            throw new StagConfigReadException("Could not parse action file.");
         }
     }
 
@@ -61,7 +58,8 @@ public class StagJSONParser {
         return actionList;
     }
 
-    private String returnStringFromKey(Object obj,String keyName) throws StagException{
+    @SuppressWarnings("SameParameterValue")
+    private String returnStringFromKey(Object obj, String keyName) throws StagException{
         Object jsonString = ((JSONObject) obj).get(keyName);
         checkExpectedType(String.class, jsonString);
         return (String) jsonString;
@@ -87,13 +85,13 @@ public class StagJSONParser {
     private void checkExpectedType (Class<?> cl, Object obj) throws StagException{
         checkNull(obj);
         if (!cl.isInstance(obj)){
-            throw new StagMalformedActionException();
+            throw new StagMalformedActionException("Error casting object in activity file.");
         }
     }
 
     private void checkNull(Object valueToCheck) throws StagException {
         if (valueToCheck == null){
-            throw new StagMalformedActionException();
+            throw new StagMalformedActionException("Null object in activity file.");
         }
     }
 

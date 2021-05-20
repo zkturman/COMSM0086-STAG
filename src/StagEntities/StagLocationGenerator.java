@@ -78,7 +78,7 @@ public class StagLocationGenerator {
             return StagItem.valueOf(type);
         }
         catch (IllegalArgumentException iae){
-            throw new StagMalformedItemsException();
+            throw new StagMalformedItemsException("Inappropriate entity type in entity file.");
         }
     }
 

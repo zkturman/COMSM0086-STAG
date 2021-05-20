@@ -7,6 +7,7 @@ public class StagPlayer {
     HashMap<String, String> inventory;
     int health = 3;
     String name;
+
     public StagPlayer(String name){
         this.name = name;
         inventory = new HashMap<>();

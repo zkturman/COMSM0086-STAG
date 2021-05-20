@@ -4,20 +4,18 @@ import StagActions.StagActionHandler;
 import StagEntities.StagPlayer;
 import StagExceptions.StagException;
 import StagExceptions.StagMalformedCommandException;
-
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * The sole purpose of this class is to maintain game state
+ * The sole purpose of this class is to maintain game state.
  */
 public class StagEngine {
 
-    private StagGame currentGame;
-    private StagActionHandler actionHandler;
-    private HashMap<String, StagPlayer> players;
+    private final StagGame currentGame;
+    private final StagActionHandler actionHandler;
+    private final HashMap<String, StagPlayer> players;
     private String incomingCommand;
     private String returnMessage;
 
@@ -70,5 +68,5 @@ public class StagEngine {
         players.put(playerName, newPlayer);
         newPlayer.setCurrentLocation(currentGame.getStartLocation());
         return newPlayer;
-    };
+    }
 }

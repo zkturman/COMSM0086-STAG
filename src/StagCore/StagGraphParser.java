@@ -18,7 +18,7 @@ public class StagGraphParser  {
     private ArrayList<Graph> locationSettings;
     private ArrayList<Edge> pathSettings;
 
-    public StagGraphParser(String filename) throws StagException {
+    public StagGraphParser(String filename) {
         entitiesFile = filename;
         locationParser = new Parser();
     }
@@ -51,7 +51,7 @@ public class StagGraphParser  {
             reader.close();
         }
         catch (IOException | ParseException exception){
-            throw new StagConfigReadException();
+            throw new StagConfigReadException("Could not parse entity file.");
         }
     }
 
@@ -72,13 +72,13 @@ public class StagGraphParser  {
     private void verifyListSize(ArrayList<?> list, int size) throws StagException{
         checkNull(list);
         if (list.size() != size){
-            throw new StagMalformedLocationException();
+            throw new StagMalformedLocationException("Entity file should only have a location and path node.");
         }
     }
 
     private void checkNull(Object obj) throws StagException {
         if (obj == null){
-            throw new StagMalformedLocationException();
+            throw new StagMalformedLocationException("Unexpected null graphs in entity file.");
         }
     }
 

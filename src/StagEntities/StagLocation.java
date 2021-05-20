@@ -7,13 +7,13 @@ import java.util.HashMap;
  */
 public class StagLocation{
 
-    private String locationName;
+    private final String locationName;
     private String description;
     private HashMap<String, String> characters;
     private HashMap<String, String> artefacts;
     private HashMap<String, String> furniture;
-    private HashMap<String, StagPlayer> players;
-    private HashMap<String, StagLocation> neighborLocations;
+    private final HashMap<String, StagPlayer> players;
+    private final HashMap<String, StagLocation> neighborLocations;
 
     public StagLocation(String name){
         locationName = name;
@@ -58,10 +58,6 @@ public class StagLocation{
 
     public HashMap<String, String> getFurniture() {
         return furniture;
-    }
-
-    public void setPlayers(HashMap<String, StagPlayer> players) {
-        this.players = players;
     }
 
     public HashMap<String, StagPlayer> getPlayers() {

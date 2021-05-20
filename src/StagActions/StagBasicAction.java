@@ -12,8 +12,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * This class is responsible for performing built-in actions
+ * This class is responsible for performing built-in actions. Class
+ * uses Reflection, so some methods are used even if marked unused.
  */
+@SuppressWarnings("unused")
 public class StagBasicAction {
 
     private final HashMap<String, String> actionMapping;
@@ -189,8 +191,10 @@ public class StagBasicAction {
         return Pattern.compile("(\\s+|^)" + trigger + "(\\s+|$)");
     }
 
+    @SuppressWarnings("AssertWithSideEffects")
     public static void test() {
         StagBasicAction testAction = new StagBasicAction();
+        //causes side effects, but for the purposes of this test, it's fine
         assert testAction.containsTrigger("goto");
         assert testAction.containsTrigger("   goto");
         assert testAction.containsTrigger("goto   ");
