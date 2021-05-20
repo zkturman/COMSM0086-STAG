@@ -172,14 +172,14 @@ public class StagBasicAction {
         returnMessage = "Current health: " + player.getHealth() + ".\n";
     }
 
-    //TODO you basically repeat this in generic action
     public boolean containsTrigger(String incomingMessage) {
         Set<String> triggerSet = actionMapping.keySet();
         boolean found = false;
         for(String trigger : triggerSet){
             Matcher matchTrigger = createPattern(trigger).matcher(incomingMessage);
             if (matchTrigger.find()) {
-                actionToBePerformed = incomingMessage.substring(matchTrigger.start(), matchTrigger.end()).trim();
+                actionToBePerformed = incomingMessage.substring(matchTrigger.start(), matchTrigger.end())
+                        .trim().toLowerCase();
                 found = true;
                 incomingCommand = incomingMessage;
             }
@@ -188,7 +188,7 @@ public class StagBasicAction {
     }
 
     private Pattern createPattern(String trigger){
-        return Pattern.compile("(\\s+|^)" + trigger + "(\\s+|$)");
+        return Pattern.compile("(\\s+|^)" + trigger + "(\\s+|$)", Pattern.CASE_INSENSITIVE);
     }
 
     @SuppressWarnings("AssertWithSideEffects")

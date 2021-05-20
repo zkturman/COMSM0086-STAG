@@ -4,8 +4,6 @@ import StagActions.StagActionHandler;
 import StagActions.StagBasicAction;
 import StagActions.StagGenericAction;
 import StagEntities.StagItemLinker;
-import StagEntities.StagLocation;
-import StagEntities.StagLocationConnector;
 import StagEntities.StagLocationGenerator;
 import StagExceptions.StagException;
 
@@ -21,13 +19,11 @@ public class StagTest {
             StagGame.test();
             StagItemLinker.test();
             StagBasicAction.test();
+            StagActionHandler.test();
+
+            //full testing of commands
             StagTest e2eTesting = new StagTest();
             e2eTesting.blackBox();
-            //TODO the following tests
-            StagLocation.test();
-            StagUtility.test();
-            StagLocationConnector.test();
-            StagActionHandler.test();
 
         }
         catch (StagException se){
@@ -204,6 +200,42 @@ public class StagTest {
         testEngine.processMessage("player1: look");
         assert !testEngine.getReturnMessage().contains("lumberjack");
         testEngine.processMessage("player1: blow horn");
+        assert testEngine.getReturnMessage().contains("as if by magic, a lumberjack appears");
+        testEngine.processMessage("player1: look");
+        assert testEngine.getReturnMessage().contains("lumberjack");
+        testEngine.processMessage("player1: goto cabin");
+
+        //check case sensitivity of custom commands
+        testEngine.processMessage("player1: Blow horn");
+        assert testEngine.getReturnMessage().contains("This action cannot be performed");
+        testEngine.processMessage("player1: look");
+        assert !testEngine.getReturnMessage().contains("lumberjack");
+
+        //check case sensitivity of custom commands
+        testEngine.processMessage("player1: BLOW horn");
+        assert testEngine.getReturnMessage().contains("This action cannot be performed");
+        testEngine.processMessage("player1: look");
+        assert !testEngine.getReturnMessage().contains("lumberjack");
+
+        testEngine.processMessage("player1: blow Horn");
+        assert testEngine.getReturnMessage().contains("This action cannot be performed");
+        testEngine.processMessage("player1: look");
+        assert !testEngine.getReturnMessage().contains("lumberjack");
+
+        testEngine.processMessage("player1: blow HORN");
+        assert testEngine.getReturnMessage().contains("This action cannot be performed");
+        testEngine.processMessage("player1: look");
+        assert !testEngine.getReturnMessage().contains("lumberjack");
+
+        //check spacing works
+        testEngine.processMessage("player1:     blow       horn     ");
+        assert testEngine.getReturnMessage().contains("as if by magic, a lumberjack appears");
+        testEngine.processMessage("player1: look");
+        assert testEngine.getReturnMessage().contains("lumberjack");
+
+        //check additional words
+        testEngine.processMessage("player1: goto cellar");
+        testEngine.processMessage("player1: please blow horn now");
         assert testEngine.getReturnMessage().contains("as if by magic, a lumberjack appears");
         testEngine.processMessage("player1: look");
         assert testEngine.getReturnMessage().contains("lumberjack");

@@ -45,7 +45,7 @@ public class StagEngine {
             throw new StagMalformedCommandException("Player name not found.");
         }
         String playerName = playerFinder.group();
-        incomingCommand = message.substring(playerFinder.end()).toLowerCase();
+        incomingCommand = message.substring(playerFinder.end());
         //remove colon from player name
         playerName = playerName.substring(0, playerName.length() - 1);
         return getPlayer(playerName);

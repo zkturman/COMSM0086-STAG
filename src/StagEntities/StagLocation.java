@@ -72,8 +72,4 @@ public class StagLocation{
         String neighborName = newNeighbor.getLocationName();
         neighborLocations.put(neighborName, newNeighbor);
     }
-
-    public static void test() {
-
-    }
 }

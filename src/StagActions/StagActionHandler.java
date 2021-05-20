@@ -147,6 +147,4 @@ public class StagActionHandler {
         assert testHandler.findSubject("potion");
         assert !testHandler.findSubject("key");
     }
-
-
 }

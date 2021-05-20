@@ -32,8 +32,4 @@ public class StagLocationConnector {
             fromLocation.addNeighbor(toLocation);
         }
     }
-
-    public static void test() throws StagException{
-
-    }
 }
