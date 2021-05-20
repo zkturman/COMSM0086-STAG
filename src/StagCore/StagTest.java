@@ -53,11 +53,8 @@ public class StagTest {
         testHealth();
         testGetInv();
         testDrop();
-        //testCustom
-        //testSummon
-
-
-
+        testCustom();
+        testSummon();
     }
 
     private void testLook() throws StagException {
@@ -174,10 +171,41 @@ public class StagTest {
     }
 
     private void testCustom() throws StagException{
+        testEngine.processMessage("player2: get axe");
+        testEngine.processMessage("player2: goto cabin");
+        testEngine.processMessage("player2: goto forest");
+        testEngine.processMessage("player2: chop tree");
 
+        //check narration
+        assert testEngine.getReturnMessage().contains("You cut down the tree with the axe");
+
+        //check location for produced object
+        testEngine.processMessage("player2: look");
+        assert testEngine.getReturnMessage().contains("A heavy wooden log");
+        assert !testEngine.getReturnMessage().contains("A tall pine tree");
+
+        //check that produced object is an artefact and that other players can see it
+        testEngine.processMessage("player1: goto forest");
+        assert testEngine.getReturnMessage().contains("A heavy wooden log");
+        assert !testEngine.getReturnMessage().contains("A tall pine tree");
+        testEngine.processMessage("player1: get log");
+        assert testEngine.getReturnMessage().contains("You gained the log");
     }
 
     private void testSummon() throws StagException{
-
+        testEngine.processMessage("player1: goto riverbank");
+        testEngine.processMessage("player1: get horn");
+        assert testEngine.getReturnMessage().contains("You gained the horn");
+        testEngine.processMessage("player1: blow horn");
+        assert testEngine.getReturnMessage().contains("as if by magic, a lumberjack appears");
+        testEngine.processMessage("player1: look");
+        assert testEngine.getReturnMessage().contains("lumberjack");
+        testEngine.processMessage("player1: goto forest");
+        testEngine.processMessage("player1: look");
+        assert !testEngine.getReturnMessage().contains("lumberjack");
+        testEngine.processMessage("player1: blow horn");
+        assert testEngine.getReturnMessage().contains("as if by magic, a lumberjack appears");
+        testEngine.processMessage("player1: look");
+        assert testEngine.getReturnMessage().contains("lumberjack");
     }
 }
