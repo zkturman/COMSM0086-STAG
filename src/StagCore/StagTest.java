@@ -11,19 +11,27 @@ public class StagTest {
     private StagEngine testEngine;
 
     public static void main(String[] args) {
+        String basicActionFile = "src/basic-actions.json";
+        String basicEntityFile = "src/basic-entities.dot";
+        String extendedActionFile = "src/extended-actions.json";
+        String extendedEntityFile = "src/extended-entities.dot";
         try {
-            StagGenericAction.test();
-            StagGraphParser.test();
-            StagJSONParser.test();
-            StagLocationGenerator.test();
-            StagGame.test();
+            StagGame.test(basicActionFile, basicEntityFile);
+
+            //location-related testing
+            StagGraphParser.test(basicEntityFile);
+            StagLocationGenerator.test(basicEntityFile);
             StagItemLinker.test();
+
+            //action-related testing
+            StagJSONParser.test(basicActionFile);
+            StagActionHandler.test(basicActionFile, basicEntityFile);
+            StagGenericAction.test();
             StagBasicAction.test();
-            StagActionHandler.test();
 
             //full testing of commands
             StagTest e2eTesting = new StagTest();
-            e2eTesting.blackBox();
+            e2eTesting.blackBox(extendedActionFile, extendedEntityFile);
 
         }
         catch (StagException se){
@@ -33,10 +41,11 @@ public class StagTest {
         System.out.println("Testing passed successfully.");
     }
 
-    public void blackBox() throws StagException {
+    public void blackBox(String actionFile, String entityFile) throws StagException {
+        //setup game and engine
         StagGame testGame = new StagGame();
-        testGame.generateLocations("src/extended-entities.dot");
-        testGame.generateActions("src/extended-actions.json");
+        testGame.generateLocations(entityFile);
+        testGame.generateActions(actionFile);
         testEngine = new StagEngine(testGame);
 
         //add players to the game
@@ -44,6 +53,7 @@ public class StagTest {
         testEngine.processMessage("player2: test");
         assert testEngine.getReturnMessage().contains("This action cannot be performed.");
 
+        //test various player-entered actions
         testLook();
         testGoto();
         testHealth();

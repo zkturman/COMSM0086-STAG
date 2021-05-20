@@ -95,8 +95,8 @@ public class StagJSONParser {
         }
     }
 
-    public static void test() throws StagException {
-        StagJSONParser testParser = new StagJSONParser("src/basic-actions.json");
+    public static void test(String actionFile) throws StagException {
+        StagJSONParser testParser = new StagJSONParser(actionFile);
         ArrayList<StagGenericAction> testArray = testParser.generateActions();
         assert testArray.size() == 4;
     }

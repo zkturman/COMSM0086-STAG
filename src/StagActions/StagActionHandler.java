@@ -126,10 +126,10 @@ public class StagActionHandler {
         return pass;
     }
 
-    public static void test() throws StagException{
+    public static void test(String actionFile, String entityFile) throws StagException{
         StagGame testGame = new StagGame();
-        testGame.generateActions("src/basic-actions.json");
-        testGame.generateLocations("src/basic-entities.dot");
+        testGame.generateActions(actionFile);
+        testGame.generateLocations(entityFile);
         StagPlayer testPlayer = new StagPlayer("test");
         testPlayer.setCurrentLocation(testGame.getStartLocation());
         StagActionHandler testHandler = new StagActionHandler(testGame);

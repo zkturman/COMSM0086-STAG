@@ -58,16 +58,16 @@ public class StagGame {
         return unplacedLocation;
     }
 
-    public static void test () throws StagException {
+    public static void test (String actionFile, String entityFile) throws StagException {
         StagGame game = new StagGame();
 
         //test actions
-        game.generateActions("src/basic-actions.json");
+        game.generateActions(actionFile);
         ArrayList<StagGenericAction> customActions = game.getCustomActions();
         assert customActions.size() == 4;
 
         //test locations
-        game.generateLocations("src/basic-entities.dot");
+        game.generateLocations(entityFile);
         HashMap<String, StagLocation> gameLocations = game.getGameLocations();
         assert gameLocations.size() == 4;
         assert gameLocations.get("start") != null;

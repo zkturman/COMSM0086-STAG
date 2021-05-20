@@ -90,8 +90,8 @@ public class StagLocationGenerator {
         return locationSettings.getNodes(false).get(0).getId().getId();
     }
 
-    public static void test() throws StagException {
-        StagGraphParser testGraph = new StagGraphParser("src/basic-entities.dot");
+    public static void test(String entityFile) throws StagException {
+        StagGraphParser testGraph = new StagGraphParser(entityFile);
         testGraph.generateGraphs();
         StagLocationGenerator testGenerator = new StagLocationGenerator();
         testGenerator.setLocationGraphs(testGraph.getLocationSettings());
@@ -100,7 +100,6 @@ public class StagLocationGenerator {
         assert testLocations.get("zzzz") == null;
         assert testLocations.get("start") != null;
 
-        //TODO test information in locations, as that is generated here
         StagLocation testStart = testLocations.get("start");
         assert testStart.getArtefacts().get("potion") != null;
         assert testStart.getArtefacts().get("door") == null;

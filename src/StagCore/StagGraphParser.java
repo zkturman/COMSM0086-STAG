@@ -57,7 +57,6 @@ public class StagGraphParser  {
 
     private void separateConfig() throws StagException {
         //one index has to be locations, and only one will return subgraphs
-        //TODO do we need to check the id is location and path
         locationSettings = locationConfig.get(0).getSubgraphs();
         pathSettings = locationConfig.get(1).getEdges();
 
@@ -82,11 +81,10 @@ public class StagGraphParser  {
         }
     }
 
-    public static void test() throws StagException {
-        StagGraphParser testParser = new StagGraphParser("src/basic-entities.dot");
+    public static void test(String entityFile) throws StagException {
+        StagGraphParser testParser = new StagGraphParser(entityFile);
         testParser.generateGraphs();
         assert testParser.getLocationSettings().size() == 4;
         assert testParser.getPathSettings().size() == 3;
     }
-
 }
