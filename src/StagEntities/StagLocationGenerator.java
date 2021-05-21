@@ -1,9 +1,9 @@
 package StagEntities;
 
 import StagCore.StagGraphParser;
-import StagCore.StagUtility;
 import StagExceptions.StagException;
 import StagExceptions.StagMalformedItemsException;
+import StagExceptions.StagNullPointerException;
 import com.alexmerz.graphviz.objects.Graph;
 import com.alexmerz.graphviz.objects.Node;
 import java.util.*;
@@ -21,12 +21,20 @@ public class StagLocationGenerator {
         this.locationGraphs = locationGraphs;
     }
 
+    public String getFirstLocation(){
+        //get first location settings
+        Graph locationSettings = locationGraphs.get(0);
+
+        //get name from first node in settings
+        return locationSettings.getNodes(false).get(0).getId().getId();
+    }
+
     public HashMap<String, StagLocation> generateLocations() throws StagException {
         HashMap<String, StagLocation> gameLocations = new HashMap<>();
 
         for (Graph location : locationGraphs){
             ArrayList<Node> locationNode = location.getNodes(false);
-            StagUtility.checkNull(locationNode);
+            checkNull(locationNode);
 
             //location name in first node
             Node locationInfo = locationNode.get(0);
@@ -60,7 +68,7 @@ public class StagLocationGenerator {
     }
 
     private HashMap<String, String> generateItems(ArrayList<Node> typedItems) throws StagException {
-        StagUtility.checkNull(typedItems);
+        checkNull(typedItems);
         HashMap<String, String> locItem = new HashMap<>();
 
         //add item and description to hash map
@@ -82,14 +90,6 @@ public class StagLocationGenerator {
         }
     }
 
-    public String getFirstLocation(){
-        //get first location settings
-        Graph locationSettings = locationGraphs.get(0);
-
-        //get name from first node in settings
-        return locationSettings.getNodes(false).get(0).getId().getId();
-    }
-
     public static void test(String entityFile) throws StagException {
         StagGraphParser testGraph = new StagGraphParser(entityFile);
         testGraph.generateGraphs();
@@ -104,5 +104,11 @@ public class StagLocationGenerator {
         assert testStart.getArtefacts().get("potion") != null;
         assert testStart.getArtefacts().get("door") == null;
         assert testStart.getFurniture().get("door") != null;
+    }
+
+    public void checkNull(Object obj) throws StagException{
+        if (obj == null){
+            throw new StagNullPointerException("Unexpected null object encountered.");
+        }
     }
 }

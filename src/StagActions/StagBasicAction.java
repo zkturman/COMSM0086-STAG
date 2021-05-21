@@ -83,7 +83,7 @@ public class StagBasicAction {
         for (String key : entities){
             returnString.append(key);
             returnString.append(", ");
-            //include description.
+            //include description
             returnString.append(gameObjects.get(key));
             returnString.append("\n");
         }

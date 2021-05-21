@@ -12,17 +12,17 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Performs a custom action
+ * The sole purpose of this class is to perform a custom action
  */
 public class StagActionPerformer {
-    StagGenericAction actionToPerform;
-    String returnMessage;
-    ArrayList<HashMap<String, String>> objectsMap;
-    HashMap<String, StagLocation> locations;
-    boolean newLocation;
-    StagLocation currentLocation;
+
+    private final StagGenericAction actionToPerform;
+    private String returnMessage;
+    private ArrayList<HashMap<String, String>> objectsMap;
+    private HashMap<String, StagLocation> locations;
+    private StagLocation currentLocation;
     private StagPlayer player;
-    boolean playerDied;
+    private boolean playerDied;
     private StagGame game;
 
     public StagActionPerformer(StagGenericAction actionToPerform){
@@ -53,8 +53,6 @@ public class StagActionPerformer {
         objectsMap.add(player.getCurrentLocation().getCharacters());
 
         locations = game.getGameLocations();
-        newLocation = false;
-
         currentLocation = player.getCurrentLocation();
     }
 

@@ -7,7 +7,11 @@ import StagEntities.StagItemLinker;
 import StagEntities.StagLocationGenerator;
 import StagExceptions.StagException;
 
+/**
+ * The sole purpose of this class is to run testing for the program.
+ */
 public class StagTest {
+
     private StagEngine testEngine;
 
     public static void main(String[] args) {
@@ -15,6 +19,7 @@ public class StagTest {
         String basicEntityFile = "src/basic-entities.dot";
         String extendedActionFile = "src/extended-actions.json";
         String extendedEntityFile = "src/extended-entities.dot";
+
         try {
             StagGame.test(basicActionFile, basicEntityFile);
 

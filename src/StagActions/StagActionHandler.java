@@ -20,14 +20,14 @@ public class StagActionHandler {
     private StagGenericAction actionToExecute;
     private StagLocation currentLocation;
 
-    public void setCommandPlayer(StagPlayer commandPlayer) {
-        this.commandPlayer = commandPlayer;
-        currentLocation = commandPlayer.getCurrentLocation();
-    }
-
     public StagActionHandler(StagGame game) {
         gameActions = game.getCustomActions();
         currentGame = game;
+    }
+
+    public void setCommandPlayer(StagPlayer commandPlayer) {
+        this.commandPlayer = commandPlayer;
+        currentLocation = commandPlayer.getCurrentLocation();
     }
 
      public String interpretCommand(String command) throws StagException {

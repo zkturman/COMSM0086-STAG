@@ -1,6 +1,5 @@
 package StagEntities;
 
-import StagExceptions.StagException;
 import com.alexmerz.graphviz.objects.Edge;
 import java.util.ArrayList;
 import java.util.HashMap;

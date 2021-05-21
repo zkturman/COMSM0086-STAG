@@ -12,14 +12,12 @@ public class StagServer {
 
     private StagEngine gameEngine;
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         if(args.length != 2) System.out.println("Usage: java StagServer <entity-file> <action-file>");
         else new StagServer(args[0], args[1], 8888);
     }
 
-    public StagServer(String entityFilename, String actionFilename, int portNumber)
-    {
+    public StagServer(String entityFilename, String actionFilename, int portNumber) {
         try {
             StagGame game = new StagGame();
             game.generateLocations(entityFilename);
@@ -34,8 +32,7 @@ public class StagServer {
         }
     }
 
-    private void acceptNextConnection(ServerSocket ss)
-    {
+    private void acceptNextConnection(ServerSocket ss) {
         try {
             // Next line will block until a connection is received
             Socket socket = ss.accept();
@@ -50,8 +47,7 @@ public class StagServer {
         }
     }
 
-    private void processNextCommand(BufferedReader in, BufferedWriter out) throws IOException
-    {
+    private void processNextCommand(BufferedReader in, BufferedWriter out) throws IOException {
         String line = in.readLine();
         try {
             gameEngine.processMessage(line);
@@ -59,6 +55,7 @@ public class StagServer {
         }
         catch (StagException se){
             out.write("ERROR: An error occurred. " + se.getErrorMessage());
+            System.out.println(se.getErrorMessage());
             se.printStackTrace();
         }
     }

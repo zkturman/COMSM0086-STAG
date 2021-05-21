@@ -63,7 +63,7 @@ public class StagEngine {
         return (playerObject == null);
     }
 
-    public StagPlayer addPlayer(String playerName) {
+    private StagPlayer addPlayer(String playerName) {
         StagPlayer newPlayer = new StagPlayer(playerName);
         players.put(playerName, newPlayer);
         newPlayer.setCurrentLocation(currentGame.getStartLocation());

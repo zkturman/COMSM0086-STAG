@@ -7,6 +7,7 @@ import java.util.HashMap;
  * The sole purpose of this class is to add a list of items to a location
  */
 public class StagItemLinker {
+
     private final StagItem itemType;
     private final StagLocation location;
     private HashMap<String, String> itemMap;

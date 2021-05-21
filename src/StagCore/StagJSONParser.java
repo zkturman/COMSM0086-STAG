@@ -60,6 +60,7 @@ public class StagJSONParser {
 
     @SuppressWarnings("SameParameterValue")
     private String returnStringFromKey(Object obj, String keyName) throws StagException{
+        //ignore warning for extensibility purposes
         Object jsonString = ((JSONObject) obj).get(keyName);
         checkExpectedType(String.class, jsonString);
         return (String) jsonString;

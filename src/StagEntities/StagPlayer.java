@@ -2,19 +2,19 @@ package StagEntities;
 
 import java.util.HashMap;
 
+/**
+ * The sole purpose of this class is to maintain the state of a player
+ */
 public class StagPlayer {
-    StagLocation currentLocation;
-    HashMap<String, String> inventory;
-    int health = 3;
-    String name;
+
+    private StagLocation currentLocation;
+    private final HashMap<String, String> inventory;
+    private int health = 3;
+    private final String name;
 
     public StagPlayer(String name){
         this.name = name;
         inventory = new HashMap<>();
-    }
-
-    public HashMap<String, String> getInventory() {
-        return inventory;
     }
 
     public StagLocation getCurrentLocation() {
@@ -26,8 +26,16 @@ public class StagPlayer {
         currentLocation.getPlayers().put(name, this);
     }
 
+    public HashMap<String, String> getInventory() {
+        return inventory;
+    }
+
     public void addToInv(String key, String description){
         inventory.put(key, description);
+    }
+
+    public int getHealth(){
+        return this.health;
     }
 
     public void increaseHealth(){
@@ -37,10 +45,6 @@ public class StagPlayer {
     public int reduceHealth() {
         health--;
         return health;
-    }
-
-    public int getHealth(){
-        return this.health;
     }
 
     public void revivePlayer() {

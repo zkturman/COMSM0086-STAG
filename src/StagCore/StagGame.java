@@ -18,6 +18,22 @@ public class StagGame {
 
     public StagGame(){}
 
+    public ArrayList<StagGenericAction> getCustomActions() {
+        return customActions;
+    }
+
+    public HashMap<String, StagLocation> getGameLocations() {
+        return gameLocations;
+    }
+
+    public StagLocation getStartLocation() {
+        return startLocation;
+    }
+
+    public StagLocation getUnplacedLocation() {
+        return unplacedLocation;
+    }
+
     public void generateActions(String filename) throws StagException {
         StagJSONParser actionGenerator = new StagJSONParser(filename);
         this.customActions = actionGenerator.generateActions();
@@ -40,22 +56,6 @@ public class StagGame {
 
         this.unplacedLocation = gameLocations.get("unplaced");
         this.startLocation = gameLocations.get(locationGenerator.getFirstLocation());
-    }
-
-    public ArrayList<StagGenericAction> getCustomActions() {
-        return customActions;
-    }
-
-    public HashMap<String, StagLocation> getGameLocations() {
-        return gameLocations;
-    }
-
-    public StagLocation getStartLocation() {
-        return startLocation;
-    }
-
-    public StagLocation getUnplacedLocation() {
-        return unplacedLocation;
     }
 
     public static void test (String actionFile, String entityFile) throws StagException {
