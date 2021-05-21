@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * StagGenericAction's only job is to generate narration if an action is valid.
+ * StagGenericAction's only job is to contain the template for a custom action.
  */
 public class StagGenericAction {
 

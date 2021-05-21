@@ -90,6 +90,12 @@ public class StagLocationGenerator {
         }
     }
 
+    private void checkNull(Object obj) throws StagException{
+        if (obj == null){
+            throw new StagNullPointerException("Unexpected null object encountered.");
+        }
+    }
+
     public static void test(String entityFile) throws StagException {
         StagGraphParser testGraph = new StagGraphParser(entityFile);
         testGraph.generateGraphs();
@@ -104,11 +110,5 @@ public class StagLocationGenerator {
         assert testStart.getArtefacts().get("potion") != null;
         assert testStart.getArtefacts().get("door") == null;
         assert testStart.getFurniture().get("door") != null;
-    }
-
-    public void checkNull(Object obj) throws StagException{
-        if (obj == null){
-            throw new StagNullPointerException("Unexpected null object encountered.");
-        }
     }
 }
